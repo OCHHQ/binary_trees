@@ -1,16 +1,44 @@
+/* binary_trees.h */
+
+#ifndef BINARY_TREES_H
+#define BINARY_TREES_H
+
+#include <stddef.h>
+
+/* Structs */
+typedef struct binary_tree_s binary_tree_t;
+
+/* Binary tree node struct */
+struct binary_tree_s
+{
+    int n;
+    struct binary_tree_s *parent;
+    struct binary_tree_s *left;
+    struct binary_tree_s *right;
+};
+
+/* Function prototypes */
+void binary_tree_print(const binary_tree_t *);
+size_t print_binary_tree_depth(const binary_tree_t *tree);
+
+#endif /* BINARY_TREES_H */
+
+
+/* binary_tree_print.c */
+
 #include "binary_trees.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 /**
- * binary_tree_depth - Measures the depth of a node in a binary tree
+ * print_binary_tree_depth - Measures the depth of a node in a binary tree
  *
  * @tree: Pointer to the node to measure the depth of
  *
  * Return: Depth of the node, or 0 if tree is NULL
  */
-size_t binary_tree_depth(const binary_tree_t *tree)
+size_t print_binary_tree_depth(const binary_tree_t *tree)
 {
     size_t depth = 0;
 
@@ -19,23 +47,22 @@ size_t binary_tree_depth(const binary_tree_t *tree)
         depth++;
         tree = tree->parent;
     }
-    return (depth - 1);
-}
-
-/**
- * print_value - Print the value of a node
- *
- * @buf: Buffer to store the string representation of the value
- * @node: Pointer to the node
- *
- * Return: Number of characters printed
- */
-int print_value(char *buf, const binary_tree_t *node)
-{
-    return sprintf(buf, "(%03d)", node->n);
+    return (depth);
 }
 
 /* Printing function for binary tree. */
+
+/**
+ * print_t - Stores recursively each level in an array of strings
+ *
+ * @tree: Pointer to the node to print
+ * @offset: Offset to print
+ * @depth: Depth of the node
+ * @s: Buffer
+ * @print: Function to print the node
+ *
+ * Return: length of printed tree after process
+ */
 static int print_t(const binary_tree_t *tree, int offset, int depth, char **s, int (*print)(char *, const binary_tree_t *))
 {
     char b[6];
@@ -64,6 +91,15 @@ static int print_t(const binary_tree_t *tree, int offset, int depth, char **s, i
     return (left + width + right);
 }
 
+/**
+ * _print - Stores the tree in an array of strings
+ *
+ * @tree: Pointer to the root node
+ * @depth: Depth of the tree
+ * @print: Function to print the node
+ *
+ * Return: Buffer with the tree stored
+ */
 static int _print(const binary_tree_t *tree, int depth, int (*print)(char *, const binary_tree_t *))
 {
     char **s;
@@ -99,12 +135,18 @@ static int _print(const binary_tree_t *tree, int depth, int (*print)(char *, con
     return (width);
 }
 
+/**
+ * binary_tree_print - Prints a binary tree
+ *
+ * @tree: Pointer to the root node of the tree to print
+ */
 void binary_tree_print(const binary_tree_t *tree)
 {
+    int (*print)(char *, const binary_tree_t *) = NULL;
     int depth;
 
     if (!tree)
         return;
-    depth = binary_tree_depth(tree);
-    _print(tree, depth, print_value);
+    depth = print_binary_tree_depth(tree);
+    _print(tree, depth, print);
 }
