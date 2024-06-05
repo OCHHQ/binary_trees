@@ -45,3 +45,4 @@ int main(void)
     launch_test(root->right->right, root->right->right->right);
     return (0);
 }
+
