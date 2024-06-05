@@ -1,0 +1,5 @@
+The average time complexities for operations on a Binary Search Tree (BST) are as follows:
+
+- Inserting the value n: O(log n)
+- Removing the node with the value n: O(log n)
+- Searching for a node in a BST of size n: O(log n)
